@@ -8,7 +8,7 @@ interface EnvironmentInterface
 
     public function getAccessTokenUrl();
 
-    public function getTokenInfoUrl();
+    public function getFoundationUrl();
 
     public function getHealthUrl();
 }

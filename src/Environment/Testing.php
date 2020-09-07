@@ -16,7 +16,7 @@ class Testing implements EnvironmentInterface
         return 'https://logintestlf.hwcloudtest.cn/oauth2/v2/token';
     }
 
-    public function getTokenInfoUrl()
+    public function getFoundationUrl()
     {
         return 'https://apitestlf.hwcloudtest.cn/rest.php';
     }

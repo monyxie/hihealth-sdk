@@ -16,7 +16,7 @@ class Production implements EnvironmentInterface
         return 'https://oauth-login.cloud.huawei.com/oauth2/v2/token';
     }
 
-    public function getTokenInfoUrl()
+    public function getFoundationUrl()
     {
         return 'https://oauth-api.cloud.huawei.com/rest.php';
     }

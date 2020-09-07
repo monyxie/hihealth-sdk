@@ -11,6 +11,7 @@ use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Monyxie\HiHealth\Environment\EnvironmentInterface;
 use Monyxie\HiHealth\Environment\Production;
 use Psr\Http\Message\ResponseInterface;
+use UnexpectedValueException;
 
 class Provider extends AbstractProvider
 {
@@ -40,7 +41,7 @@ class Provider extends AbstractProvider
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
         $timestamp = time();
-        return "{$this->environment->getTokenInfoUrl()}?nsp_ts={$timestamp}&nsp_svc=huawei.oauth2.user.getTokenInfo&open_id=OPENID";
+        return "{$this->environment->getFoundationUrl()}?nsp_ts={$timestamp}&nsp_svc=huawei.oauth2.user.getTokenInfo&open_id=OPENID";
     }
 
     /**
@@ -76,5 +77,40 @@ class Provider extends AbstractProvider
     protected function createResourceOwner(array $response, AccessToken $token)
     {
         return new ResourceOwner($response);
+    }
+
+    /**
+     * @param AccessToken $token
+     * @return array|mixed
+     * @throws IdentityProviderException
+     */
+    public function revokeAccess(AccessToken $token)
+    {
+        return $this->delUserConsentByApp($token);
+    }
+
+    /**
+     * Requests resource owner details.
+     *
+     * @param AccessToken $token
+     * @return mixed
+     * @throws IdentityProviderException
+     */
+    protected function delUserConsentByApp(AccessToken $token)
+    {
+        $timestamp = time();
+        $url =  "{$this->environment->getFoundationUrl()}?nsp_ts={$timestamp}&nsp_svc=huawei.oauth2.consent.delUserConsentByApp";
+
+        $request = $this->getAuthenticatedRequest(self::METHOD_POST, $url, $token);
+
+        $response = $this->getParsedResponse($request);
+
+        if (false === is_array($response)) {
+            throw new UnexpectedValueException(
+                'Invalid response received from Authorization Server. Expected JSON.'
+            );
+        }
+
+        return $response;
     }
 }
