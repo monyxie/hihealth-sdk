@@ -70,7 +70,7 @@ class Provider extends AbstractProvider
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if ($response->getStatusCode() < 200 || $response->getStatusCode() > 299) {
-            throw new IdentityProviderException("Response status failure", $data['error'] ?? 0, $response->getBody());
+            throw new IdentityProviderException("Response status failure", $data['error'] ?? 0, $response->getBody() . '');
         }
     }
 
